@@ -1,24 +1,24 @@
 package tracker
 
-type tracker struct {
+type Tracker struct {
 	repository Repository
 }
 
-func New(repository Repository) *tracker {
-	return &tracker{repository: repository}
+func New(repository Repository) *Tracker {
+	return &Tracker{repository: repository}
 }
 
 type Repository interface {
-	fetch() int
-	add(caffeineInMg int)
+	Fetch() int
+	Add(caffeineInMg int)
 }
 
-func (tracker *tracker) GetLevel() int {
+func (tracker *Tracker) GetLevel() int {
 	//todo calculate level for right now
 	//todo cleanup entries older than 24h
-	return tracker.repository.fetch()
+	return tracker.repository.Fetch()
 }
 
-func (tracker *tracker) Add(caffeineInMg int) {
-	tracker.repository.add(caffeineInMg)
+func (tracker *Tracker) Add(caffeineInMg int) {
+	tracker.repository.Add(caffeineInMg)
 }

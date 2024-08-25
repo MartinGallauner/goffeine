@@ -6,11 +6,11 @@ type TestRepository struct {
 	counter int
 }
 
-func (r *TestRepository) fetch() int {
+func (r *TestRepository) Fetch() int {
 	return r.counter
 }
 
-func (r *TestRepository) add(caffeineInMg int) {
+func (r *TestRepository) Add(caffeineInMg int) {
 	r.counter += caffeineInMg
 }
 
