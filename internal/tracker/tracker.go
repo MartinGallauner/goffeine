@@ -1,5 +1,7 @@
 package tracker
 
+import "log"
+
 type Tracker struct {
 	repository Repository
 }
@@ -9,16 +11,22 @@ func New(repository Repository) *Tracker {
 }
 
 type Repository interface {
-	Fetch() int
-	Add(caffeineInMg int)
+	Fetch() ([][]string, error)
+	Add(caffeineInMg int) error
 }
 
-func (tracker *Tracker) GetLevel() int {
+func (tracker *Tracker) GetLevel() {
 	//todo calculate level for right now
 	//todo cleanup entries older than 24h
-	return tracker.repository.Fetch()
+	data, _ := tracker.repository.Fetch()
+	log.Println(data)
+
 }
 
 func (tracker *Tracker) Add(caffeineInMg int) {
-	tracker.repository.Add(caffeineInMg)
+	err := tracker.repository.Add(caffeineInMg)
+	if err != nil {
+		log.Println("Error adding caffeine")
+	}
+	log.Printf("Added %vmg of caffeine", caffeineInMg)
 }

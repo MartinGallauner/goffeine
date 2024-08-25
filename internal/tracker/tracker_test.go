@@ -6,8 +6,8 @@ type TestRepository struct {
 	counter int
 }
 
-func (r *TestRepository) Fetch() int {
-	return r.counter
+func (r *TestRepository) Fetch() [][]string {
+	return [][]string{}
 }
 
 func (r *TestRepository) Add(caffeineInMg int) {

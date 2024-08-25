@@ -23,6 +23,13 @@ func main() {
 
 	log.Println(tracker)
 
+	switch command {
+	case "add":
+		tracker.Add(num)
+	case "status":
+		tracker.GetLevel()
+	}
+
 	log.Printf("Got command %q with number %v", command, num)
 
 	log.Println("Stopping Goffeine")
