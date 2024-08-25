@@ -1,25 +1,41 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"strconv"
 )
 
 func main() {
 	log.Println("Started Goffeine")
 
-	processArgs(os.Args[1:])
+	command, num, err := processArgs(os.Args[1:])
+
+	if err != nil {
+		log.Fatal("Unable to handle passed arguments.")
+	}
+	log.Printf("Got command %q with number %v", command, num)
 
 	log.Println("Stopping Goffeine")
 }
 
-func processArgs(args []string) string {
-	if len(os.Args) < 1 {
-		log.Println("Please provide an argument")
-		return ""
+func processArgs(args []string) (string, int, error) {
+	if len(args) < 1 {
+		log.Fatal("Please provide an argument")
 	}
 
 	command := args[0]
-	return command
+
+	if command == "add" {
+		num, err := strconv.Atoi(args[1])
+		if err != nil {
+			// handle error
+			fmt.Println("Error:", err)
+			return "", 0, nil
+		}
+		return command, num, nil
+	}
+	return command, 0, nil
 
 }
