@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const halfLife = 5 * time.Hour //half life of caffeine
+const halfLife = 5 * time.Hour //half life of caffeine todo move to config
 
 type Tracker struct {
 	repository Repository
