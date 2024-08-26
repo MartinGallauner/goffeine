@@ -1,10 +1,8 @@
 package tracker
 
 import (
-	"fmt"
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"log"
-	"strconv"
 	"time"
 )
 
@@ -38,16 +36,6 @@ func (tracker *Tracker) GetLevel(now time.Time) (int, error) {
 	}
 	log.Printf("You have %vmg of caffeine in your system", caffeineLevel)
 	return caffeineLevel, nil //todo calculate level
-}
-
-func parseInt(s string) int {
-	// Implement error handling and conversion logic as needed
-	i, err := strconv.Atoi(s)
-	if err != nil {
-		fmt.Println("Error converting to int:", err)
-		return 0 // Or handle the error differently
-	}
-	return i
 }
 
 func (tracker *Tracker) Add(timestamp time.Time, caffeineInMg int) error {
