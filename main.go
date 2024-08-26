@@ -24,7 +24,7 @@ func main() {
 
 	switch command {
 	case "add":
-		t.Add(num)
+		t.Add(time.Now(), num)
 	case "status":
 		t.GetLevel(time.Now())
 	}
