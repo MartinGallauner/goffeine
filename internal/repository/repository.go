@@ -31,8 +31,6 @@ func (r *CSVRepository) Add(caffeineInMg int) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-
 	return nil
 }
 
