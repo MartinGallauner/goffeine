@@ -18,7 +18,7 @@ func New(repository Repository) *Tracker {
 
 type Repository interface {
 	Fetch() ([]repository.Entry, error)
-	Add(timestamp string, caffeineInMg int) error
+	Add(timestamp time.Time, caffeineInMg int) error
 }
 
 func (tracker *Tracker) GetLevel(now time.Time) (int, error) {
@@ -50,8 +50,7 @@ func parseInt(s string) int {
 	return i
 }
 
-func (tracker *Tracker) Add(caffeineInMg int) error {
-	timestamp := time.Now().Format("2006-01-02T15:04:05")
+func (tracker *Tracker) Add(timestamp time.Time, caffeineInMg int) error {
 	err := tracker.repository.Add(timestamp, caffeineInMg)
 	if err != nil {
 		log.Println("Error adding caffeine")

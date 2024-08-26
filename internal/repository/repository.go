@@ -12,7 +12,7 @@ type CSVRepository struct {
 	csvPath string
 }
 
-func (r *CSVRepository) Add(timestamp string, caffeineInMg int) error {
+func (r *CSVRepository) Add(timestamp time.Time, caffeineInMg int) error {
 	// Open the CSV file
 	file, err := os.OpenFile(r.csvPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
@@ -24,8 +24,9 @@ func (r *CSVRepository) Add(timestamp string, caffeineInMg int) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
+	timestampStr := timestamp.Format("2006-01-02T15:04:05")
 	value := strconv.Itoa(caffeineInMg)
-	err = writer.Write([]string{timestamp, value}) // Open the CSV file
+	err = writer.Write([]string{timestampStr, value}) // Open the CSV file
 
 	if err != nil {
 		return err

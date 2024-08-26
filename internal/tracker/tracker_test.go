@@ -14,13 +14,9 @@ func (r *TestRepository) Fetch() ([]repository.Entry, error) {
 	return r.entries, nil
 }
 
-func (r *TestRepository) Add(timestamp string, caffeineInMg int) error {
-	time, err := time.Parse("2006-01-02T15:04:05", timestamp)
-	if err != nil {
-		return err
-	}
+func (r *TestRepository) Add(timestamp time.Time, caffeineInMg int) error {
 	entries := append(r.entries, repository.Entry{
-		Timestamp:    time,
+		Timestamp:    timestamp,
 		CaffeineInMg: caffeineInMg,
 	})
 	r.entries = entries
@@ -37,10 +33,10 @@ func TestLevelIsZero(t *testing.T) {
 	}
 }
 
-func TestAddCaffeine(t *testing.T) {
+func TestAddCaffeineSameMoment(t *testing.T) {
 	tracker := New(&TestRepository{})
-	tracker.Add(100)
 	timestamp := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
+	tracker.Add(timestamp, 100)
 	caffeineLevel, _ := tracker.GetLevel(timestamp)
 
 	if caffeineLevel != 100 {
