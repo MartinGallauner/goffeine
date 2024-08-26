@@ -43,3 +43,17 @@ func TestAddCaffeineSameMoment(t *testing.T) {
 		t.Errorf("Expected 100 but got '%v'", caffeineLevel)
 	}
 }
+
+func TestAddCaffeineHalfLife(t *testing.T) {
+	tracker := New(&TestRepository{})
+	addTime := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
+	tracker.Add(addTime, 100)
+
+	checkTime := addTime.Add(time.Minute * 150)
+
+	caffeineLevel, _ := tracker.GetLevel(checkTime)
+
+	if caffeineLevel != 50 {
+		t.Errorf("Expected half-life value of 50mg but got '%vmg'", caffeineLevel)
+	}
+}
