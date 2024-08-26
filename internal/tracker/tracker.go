@@ -17,11 +17,11 @@ func New(repository Repository) *Tracker {
 
 type Repository interface {
 	Fetch() ([][]string, error)
-	Add(caffeineInMg int) error
+	Add(timestamp string, caffeineInMg int) error
 }
 
 type Entry struct {
-	timestamp    time.Time
+	timestamp    string
 	caffeineInMg int
 }
 
@@ -32,7 +32,7 @@ func (tracker *Tracker) GetLevel() (int, error) {
 
 	//parse data
 	data = data[1:] //ignore the header row
-	layout := "2006-01-02T15:04:05Z07:00"
+	layout := "2006-01-02T15:04:05"
 	caffeineLevel := 0
 	for _, row := range data {
 		timestamp, err := time.Parse(layout, row[0])
@@ -46,7 +46,7 @@ func (tracker *Tracker) GetLevel() (int, error) {
 			caffeineLevel += value
 		}
 	}
-	log.Printf("You have %q of caffeine in your system")
+	log.Printf("You have %vmg of caffeine in your system", caffeineLevel)
 	return caffeineLevel, nil //todo calculate level
 }
 
@@ -60,10 +60,12 @@ func parseInt(s string) int {
 	return i
 }
 
-func (tracker *Tracker) Add(caffeineInMg int) {
-	err := tracker.repository.Add(caffeineInMg)
+func (tracker *Tracker) Add(caffeineInMg int) error {
+	timestamp := time.Now().Format("2006-01-02T15:04:05")
+	err := tracker.repository.Add(timestamp, caffeineInMg)
 	if err != nil {
 		log.Println("Error adding caffeine")
 	}
 	log.Printf("Added %vmg of caffeine", caffeineInMg)
+	return nil
 }

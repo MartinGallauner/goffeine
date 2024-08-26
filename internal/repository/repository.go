@@ -4,14 +4,13 @@ import (
 	"encoding/csv"
 	"os"
 	"strconv"
-	"time"
 )
 
 type CSVRepository struct {
 	csvPath string
 }
 
-func (r *CSVRepository) Add(caffeineInMg int) error {
+func (r *CSVRepository) Add(timestamp string, caffeineInMg int) error {
 	// Open the CSV file
 	file, err := os.OpenFile(r.csvPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
@@ -23,9 +22,7 @@ func (r *CSVRepository) Add(caffeineInMg int) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	timestamp := time.Now().String()
 	value := strconv.Itoa(caffeineInMg)
-
 	err = writer.Write([]string{timestamp, value}) // Open the CSV file
 
 	if err != nil {
@@ -39,7 +36,6 @@ func New(path string) *CSVRepository {
 }
 
 func (r *CSVRepository) Fetch() ([][]string, error) {
-
 	// Open the CSV file
 	file, err := os.Open(r.csvPath)
 	if err != nil {

@@ -15,24 +15,19 @@ func main() {
 	command, num, err := processArgs(os.Args[1:])
 
 	if err != nil {
-		log.Fatal("Unable to handle passed arguments.")
+		log.Fatalf("Unable to handle passed arguments. Got %q", os.Args)
 	}
 
 	csvRepository := repository.New("data/data.csv")
-	tracker := tracker.New(csvRepository)
-
-	log.Println(tracker)
+	t := tracker.New(csvRepository)
 
 	switch command {
 	case "add":
-		tracker.Add(num)
+		t.Add(num)
 	case "status":
-		tracker.GetLevel()
+		t.GetLevel()
 	}
-
-	log.Printf("Got command %q with number %v", command, num)
-
-	log.Println("Stopping Goffeine")
+	log.Println("Finished Goffeine")
 }
 
 func processArgs(args []string) (string, int, error) {
