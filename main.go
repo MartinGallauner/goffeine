@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 )
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 	case "add":
 		t.Add(num)
 	case "status":
-		t.GetLevel()
+		t.GetLevel(time.Now())
 	}
 	log.Println("Finished Goffeine")
 }

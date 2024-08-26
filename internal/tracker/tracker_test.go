@@ -29,7 +29,8 @@ func (r *TestRepository) Add(timestamp string, caffeineInMg int) error {
 
 func TestLevelIsZero(t *testing.T) {
 	tracker := New(&TestRepository{})
-	caffeineLevel, _ := tracker.GetLevel()
+	timestamp := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
+	caffeineLevel, _ := tracker.GetLevel(timestamp)
 
 	if caffeineLevel != 0 {
 		t.Errorf("Expected zero but got '%v'", caffeineLevel)
@@ -39,7 +40,8 @@ func TestLevelIsZero(t *testing.T) {
 func TestAddCaffeine(t *testing.T) {
 	tracker := New(&TestRepository{})
 	tracker.Add(100)
-	caffeineLevel, _ := tracker.GetLevel()
+	timestamp := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
+	caffeineLevel, _ := tracker.GetLevel(timestamp)
 
 	if caffeineLevel != 100 {
 		t.Errorf("Expected 100 but got '%v'", caffeineLevel)

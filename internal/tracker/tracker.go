@@ -21,7 +21,7 @@ type Repository interface {
 	Add(timestamp string, caffeineInMg int) error
 }
 
-func (tracker *Tracker) GetLevel() (int, error) {
+func (tracker *Tracker) GetLevel(now time.Time) (int, error) {
 	//todo calculate level for right now
 	//todo cleanup entries older than 24h
 
@@ -32,7 +32,7 @@ func (tracker *Tracker) GetLevel() (int, error) {
 
 	caffeineLevel := 0
 	for _, entry := range entries {
-		if time.Now().Add(-1 * 24 * time.Hour).Before(entry.Timestamp) {
+		if now.Add(-1 * 24 * time.Hour).Before(entry.Timestamp) {
 			caffeineLevel += entry.CaffeineInMg
 		}
 	}
