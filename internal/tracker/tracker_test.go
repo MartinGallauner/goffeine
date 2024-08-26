@@ -1,22 +1,35 @@
 package tracker
 
-import "testing"
+import (
+	"github.com/MartinGallauner/goffeine/internal/repository"
+	"testing"
+	"time"
+)
 
 type TestRepository struct {
-	counter int
+	entries []repository.Entry
 }
 
-func (r *TestRepository) Fetch() [][]string {
-	return [][]string{}
+func (r *TestRepository) Fetch() ([]repository.Entry, error) {
+	return r.entries, nil
 }
 
-func (r *TestRepository) Add(caffeineInMg int) {
-	r.counter += caffeineInMg
+func (r *TestRepository) Add(timestamp string, caffeineInMg int) error {
+	time, err := time.Parse("2006-01-02T15:04:05", timestamp)
+	if err != nil {
+		return err
+	}
+	entries := append(r.entries, repository.Entry{
+		Timestamp:    time,
+		CaffeineInMg: caffeineInMg,
+	})
+	r.entries = entries
+	return nil
 }
 
 func TestLevelIsZero(t *testing.T) {
 	tracker := New(&TestRepository{})
-	caffeineLevel := tracker.GetLevel()
+	caffeineLevel, _ := tracker.GetLevel()
 
 	if caffeineLevel != 0 {
 		t.Errorf("Expected zero but got '%v'", caffeineLevel)
@@ -26,7 +39,7 @@ func TestLevelIsZero(t *testing.T) {
 func TestAddCaffeine(t *testing.T) {
 	tracker := New(&TestRepository{})
 	tracker.Add(100)
-	caffeineLevel := tracker.GetLevel()
+	caffeineLevel, _ := tracker.GetLevel()
 
 	if caffeineLevel != 100 {
 		t.Errorf("Expected 100 but got '%v'", caffeineLevel)
