@@ -3,8 +3,11 @@ package tracker
 import (
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"log"
+	"math"
 	"time"
 )
+
+const halfLife = 5 * time.Hour //half life of caffeine
 
 type Tracker struct {
 	repository Repository
@@ -20,8 +23,7 @@ type Repository interface {
 }
 
 func (tracker *Tracker) GetLevel(now time.Time) (int, error) {
-	//todo calculate level for right now
-	//todo cleanup entries older than 24h
+	//todo cleanup entries older than 24h?
 
 	entries, err := tracker.repository.Fetch()
 	if err != nil {
@@ -30,12 +32,26 @@ func (tracker *Tracker) GetLevel(now time.Time) (int, error) {
 
 	caffeineLevel := 0
 	for _, entry := range entries {
-		if now.Add(-1 * 24 * time.Hour).Before(entry.Timestamp) {
-			caffeineLevel += entry.CaffeineInMg
+		if now.Add(-1 * 24 * time.Hour).Before(entry.Timestamp) { //filter out entries older than 24h
+
+			remainingCaffeine := calculateRemainingCaffeine(entry.CaffeineInMg, now.Sub(entry.Timestamp), halfLife)
+			caffeineLevel += remainingCaffeine
 		}
 	}
 	log.Printf("You have %vmg of caffeine in your system", caffeineLevel)
-	return caffeineLevel, nil //todo calculate level
+	return caffeineLevel, nil
+}
+
+// CalculateRemainingCaffeine calculates the remaining quantity of a substance
+// after a given time period based on its half-life.
+func calculateRemainingCaffeine(initialAmount int, elapsed time.Duration, halfLife time.Duration) int {
+	// Convert elapsed time and half-life to hours
+	elapsedMinutes := elapsed.Minutes()
+	halfLifeMinutes := halfLife.Minutes()
+
+	// Apply the exponential decay formula
+	remainingAmount := float64(initialAmount) * math.Pow(0.5, elapsedMinutes/halfLifeMinutes)
+	return int(remainingAmount) //todo conversion is a bit risky
 }
 
 func (tracker *Tracker) Add(timestamp time.Time, caffeineInMg int) error {

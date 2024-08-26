@@ -49,7 +49,7 @@ func TestAddCaffeineHalfLife(t *testing.T) {
 	addTime := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
 	tracker.Add(addTime, 100)
 
-	checkTime := addTime.Add(time.Minute * 150)
+	checkTime := addTime.Add(time.Minute * 300)
 
 	caffeineLevel, _ := tracker.GetLevel(checkTime)
 
