@@ -2,6 +2,7 @@ package tracker
 
 import (
 	"fmt"
+	"github.com/MartinGallauner/goffeine/internal/repository"
 	"log"
 	"strconv"
 	"time"
@@ -16,34 +17,23 @@ func New(repository Repository) *Tracker {
 }
 
 type Repository interface {
-	Fetch() ([][]string, error)
+	Fetch() ([]repository.Entry, error)
 	Add(timestamp string, caffeineInMg int) error
-}
-
-type Entry struct {
-	timestamp    string
-	caffeineInMg int
 }
 
 func (tracker *Tracker) GetLevel() (int, error) {
 	//todo calculate level for right now
 	//todo cleanup entries older than 24h
-	data, _ := tracker.repository.Fetch()
 
-	//parse data
-	data = data[1:] //ignore the header row
-	layout := "2006-01-02T15:04:05"
+	entries, err := tracker.repository.Fetch()
+	if err != nil {
+		return 0, err
+	}
+
 	caffeineLevel := 0
-	for _, row := range data {
-		timestamp, err := time.Parse(layout, row[0])
-		if err != nil {
-			return 0, err
-		}
-
-		value := parseInt(row[1])
-
-		if time.Now().Add(-1 * 24 * time.Hour).Before(timestamp) {
-			caffeineLevel += value
+	for _, entry := range entries {
+		if time.Now().Add(-1 * 24 * time.Hour).Before(entry.Timestamp) {
+			caffeineLevel += entry.CaffeineInMg
 		}
 	}
 	log.Printf("You have %vmg of caffeine in your system", caffeineLevel)
