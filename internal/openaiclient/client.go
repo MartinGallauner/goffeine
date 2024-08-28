@@ -34,7 +34,7 @@ func (cs CaffeineSchema) MarshalJSON() ([]byte, error) {
 	return json.Marshal(schema)
 }
 
-func AskChatGPT(input string) (CaffeineSchema, error) {
+func AskOpenAI(userInput string) (CaffeineSchema, error) {
 	err := godotenv.Load()
 	if err != nil {
 		return CaffeineSchema{}, err
@@ -56,7 +56,7 @@ func AskChatGPT(input string) (CaffeineSchema, error) {
 			},
 			{
 				Role:    "user",
-				Content: "I had two red bull one hour ago",
+				Content: userInput,
 			},
 		},
 	}
@@ -65,7 +65,6 @@ func AskChatGPT(input string) (CaffeineSchema, error) {
 		fmt.Printf("Completion error: %v\n", err)
 		return CaffeineSchema{}, err
 	}
-	fmt.Println(resp.Choices[0].Message.Content)
 
 	// Create an instance of your struct
 	var answer CaffeineSchema

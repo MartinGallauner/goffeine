@@ -1,17 +1,7 @@
 package repl
 
-import (
-	"strconv"
-	"time"
-)
-
-func commandAdd(cfg *Config, parameter string) error {
-	num, err := strconv.Atoi(parameter)
-	if err != nil {
-		return err
-	}
-
-	err = cfg.Tracker.Add(time.Now(), num)
+func commandAdd(cfg *Config, userInput string) error {
+	err := cfg.Tracker.Add(userInput)
 	if err != nil {
 		return err
 	}

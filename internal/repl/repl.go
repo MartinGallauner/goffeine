@@ -28,8 +28,8 @@ func StartRepl(cfg *Config) {
 		commandName := words[0]
 
 		var parameter string
-		if len(words) == 2 {
-			parameter = words[1]
+		if len(words) >= 2 {
+			parameter = strings.Join(words[1:], " ")
 		}
 
 		command, exists := getCommands()[commandName]

@@ -55,16 +55,16 @@ func calculateRemainingCaffeine(initialAmount int, elapsed time.Duration, halfLi
 	return int(remainingAmount) //todo conversion is a bit risky
 }
 
-func (tracker *Tracker) Add(timestamp time.Time, caffeineInMg int) error {
-	_, err := openaiclient.AskChatGPT("Eine Tasse Kaffee vor einer Stunde")
+func (tracker *Tracker) Add(userInput string) error {
+	caffeineIntake, err := openaiclient.AskOpenAI(userInput)
 	if err != nil {
 		return err
 	}
 
-	err = tracker.repository.Add(timestamp, caffeineInMg)
+	err = tracker.repository.Add(caffeineIntake.Timestamp, caffeineIntake.CaffeineInMg)
 	if err != nil {
 		log.Println("Error adding caffeine")
 	}
-	log.Printf("Added %vmg of caffeine", caffeineInMg)
+	log.Printf("Added %vmg of caffeine", caffeineIntake.CaffeineInMg)
 	return nil
 }
