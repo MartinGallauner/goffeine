@@ -24,7 +24,7 @@ func (r *CSVRepository) Add(timestamp time.Time, caffeineInMg int) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	timestampStr := timestamp.Format("2006-01-02T15:04:05")
+	timestampStr := timestamp.Format("2006-01-02T15:04:05 MST")
 	value := strconv.Itoa(caffeineInMg)
 	err = writer.Write([]string{timestampStr, value}) // Open the CSV file
 
