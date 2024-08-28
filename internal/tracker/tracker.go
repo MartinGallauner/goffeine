@@ -1,6 +1,7 @@
 package tracker
 
 import (
+	"github.com/MartinGallauner/goffeine/internal/openaiclient"
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"log"
 	"math"
@@ -55,7 +56,12 @@ func calculateRemainingCaffeine(initialAmount int, elapsed time.Duration, halfLi
 }
 
 func (tracker *Tracker) Add(timestamp time.Time, caffeineInMg int) error {
-	err := tracker.repository.Add(timestamp, caffeineInMg)
+	_, err := openaiclient.AskChatGPT("Eine Tasse Kaffee vor einer Stunde")
+	if err != nil {
+		return err
+	}
+
+	err = tracker.repository.Add(timestamp, caffeineInMg)
 	if err != nil {
 		log.Println("Error adding caffeine")
 	}
