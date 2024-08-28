@@ -1,16 +1,11 @@
 package repl
 
-import "fmt"
+import (
+	"time"
+)
 
 func commandStatus(cfg *Config, parameter string) error {
-	fmt.Println("Welcome to the Goffeine!")
-	fmt.Println("Usage:")
-	fmt.Println()
-
-	for _, cmd := range getCommands() {
-		fmt.Printf("%s: %s \n", cmd.name, cmd.description)
-	}
-	fmt.Println()
+	cfg.Tracker.GetLevel(time.Now())
 	return nil
 
 }

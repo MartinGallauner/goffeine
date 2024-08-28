@@ -1,16 +1,21 @@
 package repl
 
-import "fmt"
+import (
+	"strconv"
+	"time"
+)
 
 func commandAdd(cfg *Config, parameter string) error {
-	fmt.Println("Welcome to the Goffeine!")
-	fmt.Println("Usage:")
-	fmt.Println()
-
-	for _, cmd := range getCommands() {
-		fmt.Printf("%s: %s \n", cmd.name, cmd.description)
+	num, err := strconv.Atoi(parameter)
+	if err != nil {
+		return err
 	}
-	fmt.Println()
+
+	err = cfg.Tracker.Add(time.Now(), num)
+	if err != nil {
+		return err
+	}
+
 	return nil
 
 }
