@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/MartinGallauner/goffeine/internal/repl"
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
 	"log"
@@ -13,14 +14,15 @@ import (
 func main() {
 	log.Println("Started Goffeine")
 
-	command, num, err := processArgs(os.Args[1:])
+	csvRepository := repository.New("data/data.csv")
+	t := tracker.New(csvRepository)
+	config := &repl.Config{Tracker: *t}
+	repl.StartRepl(config)
 
+	command, num, err := processArgs(os.Args[1:])
 	if err != nil {
 		log.Fatalf("Unable to handle passed arguments. Got %q", os.Args)
 	}
-
-	csvRepository := repository.New("data/data.csv")
-	t := tracker.New(csvRepository)
 
 	switch command {
 	case "add":

@@ -60,7 +60,7 @@ func (r *CSVRepository) Fetch() ([]Entry, error) {
 
 	//parse data
 	data = data[1:] //ignore the header row
-	layout := "2006-01-02T15:04:05"
+	layout := "2006-01-02T15:04:05 MST"
 	var entries []Entry
 	for _, row := range data {
 		timestamp, err := time.Parse(layout, row[0])
