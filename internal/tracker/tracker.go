@@ -1,7 +1,7 @@
 package tracker
 
 import (
-	"github.com/MartinGallauner/goffeine/internal/openaiclient"
+	"github.com/MartinGallauner/goffeine/internal/llmclient"
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"log"
 	"math"
@@ -12,10 +12,11 @@ const halfLife = 5 * time.Hour //half life of caffeine todo move to config
 
 type Tracker struct {
 	repository Repository
+	client     llmclient.LlmClient
 }
 
-func New(repository Repository) *Tracker {
-	return &Tracker{repository: repository}
+func New(repository Repository, client llmclient.LlmClient) *Tracker {
+	return &Tracker{repository: repository, client: client}
 }
 
 type Repository interface {
@@ -56,7 +57,7 @@ func calculateRemainingCaffeine(initialAmount int, elapsed time.Duration, halfLi
 }
 
 func (tracker *Tracker) Add(userInput string) error {
-	caffeineIntake, err := openaiclient.AskOpenAI(userInput)
+	caffeineIntake, err := tracker.client.AskLlm(userInput)
 	if err != nil {
 		return err
 	}

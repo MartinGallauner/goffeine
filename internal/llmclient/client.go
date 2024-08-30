@@ -1,10 +1,9 @@
-package openaiclient
+package llmclient
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/joho/godotenv"
 	"github.com/sashabaranov/go-openai"
 	"os"
 	"time"
@@ -34,14 +33,17 @@ func (cs CaffeineSchema) MarshalJSON() ([]byte, error) {
 	return json.Marshal(schema)
 }
 
-func AskOpenAI(userInput string) (CaffeineSchema, error) {
-	err := godotenv.Load()
-	if err != nil {
-		return CaffeineSchema{}, err
-	}
-	client := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
-	ctx := context.Background()
+type LlmClient struct {
+	client openai.Client
+}
 
+func New() *LlmClient {
+	client := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
+	return &LlmClient{client: *client}
+}
+
+func (c *LlmClient) AskLlm(userInput string) (CaffeineSchema, error) {
+	ctx := context.Background()
 	req := openai.ChatCompletionRequest{
 		Model:       openai.GPT3Dot5Turbo,
 		MaxTokens:   500,
@@ -52,7 +54,7 @@ func AskOpenAI(userInput string) (CaffeineSchema, error) {
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    "system",
-				Content: systemMessage,
+				Content: fmt.Sprintf(systemMessage, time.Now()),
 			},
 			{
 				Role:    "user",
@@ -60,7 +62,7 @@ func AskOpenAI(userInput string) (CaffeineSchema, error) {
 			},
 		},
 	}
-	resp, err := client.CreateChatCompletion(ctx, req)
+	resp, err := c.client.CreateChatCompletion(ctx, req)
 	if err != nil {
 		fmt.Printf("Completion error: %v\n", err)
 		return CaffeineSchema{}, err
@@ -78,4 +80,5 @@ func AskOpenAI(userInput string) (CaffeineSchema, error) {
 	return answer, nil
 }
 
-const systemMessage = "You are an assistant that provides information about caffeine consumption. \nYour responses should always be in JSON format with the following structure:\n{\n  \"timestamp\": \"2024-08-28T14:30:00Z\",\n  \"caffeineInMg\": \n}\nWhere \"timestamp\" is the ISO 8601 formatted date and time of consumption, \nand \"caffeineInMg\" is an integer representing the amount of caffeine in milligrams."
+var systemMessage = "You are an assistant that provides information about caffeine consumption. " +
+	"\nYour responses should always be in JSON format with the following structure:\n{\n  \"timestamp\": ,\n  \"caffeineInMg\": \n}\nWhere \"timestamp\" is the ISO 8601 formatted date and time of consumption, \nand \"caffeineInMg\" is an integer representing the amount of caffeine in milligrams. The time right now is: %v"
