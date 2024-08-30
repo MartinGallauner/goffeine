@@ -20,7 +20,7 @@ func main() {
 	csvRepository := repository.New("data/data.csv")
 	client := askopenai.New()
 
-	t := tracker.New(csvRepository, *client)
+	t := tracker.New(csvRepository, client)
 	config := &repl.Config{Tracker: *t}
 	repl.StartRepl(config)
 }
