@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/MartinGallauner/goffeine/internal/llmclient"
+	"github.com/MartinGallauner/goffeine/internal/askopenai"
 	"github.com/MartinGallauner/goffeine/internal/repl"
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
@@ -18,7 +18,7 @@ func main() {
 	}
 
 	csvRepository := repository.New("data/data.csv")
-	client := llmclient.New()
+	client := askopenai.New()
 
 	t := tracker.New(csvRepository, *client)
 	config := &repl.Config{Tracker: *t}

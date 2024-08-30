@@ -1,6 +1,7 @@
 package tracker
 
 import (
+	"github.com/MartinGallauner/goffeine/internal/askopenai"
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"testing"
 	"time"
@@ -23,8 +24,19 @@ func (r *TestRepository) Add(timestamp time.Time, caffeineInMg int) error {
 	return nil
 }
 
+type MockClient struct {
+}
+
+func (c *MockClient) AskLlm(input string) (askopenai.CaffeineIntake, error) {
+	return askopenai.CaffeineIntake{
+		Timestamp:    time.Time{},
+		CaffeineInMg: 100,
+	}, nil
+
+}
+
 func TestLevelIsZero(t *testing.T) {
-	tracker := New(&TestRepository{})
+	tracker := New(&TestRepository{}, &MockClient{})
 	timestamp := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
 	caffeineLevel, _ := tracker.GetLevel(timestamp)
 

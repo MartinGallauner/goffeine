@@ -1,7 +1,7 @@
 package tracker
 
 import (
-	"github.com/MartinGallauner/goffeine/internal/llmclient"
+	"github.com/MartinGallauner/goffeine/internal/askopenai"
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"log"
 	"math"
@@ -10,12 +10,16 @@ import (
 
 const halfLife = 5 * time.Hour //half life of caffeine todo move to config
 
-type Tracker struct {
-	repository Repository
-	client     llmclient.LlmClient
+type LlmClient interface {
+	Ask() (askopenai.CaffeineIntake, error)
 }
 
-func New(repository Repository, client llmclient.LlmClient) *Tracker {
+type Tracker struct {
+	repository Repository
+	client     askopenai.Client
+}
+
+func New(repository Repository, client askopenai.Client) *Tracker {
 	return &Tracker{repository: repository, client: client}
 }
 
@@ -57,7 +61,7 @@ func calculateRemainingCaffeine(initialAmount int, elapsed time.Duration, halfLi
 }
 
 func (tracker *Tracker) Add(userInput string) error {
-	caffeineIntake, err := tracker.client.AskLlm(userInput)
+	caffeineIntake, err := tracker.client.Ask(userInput)
 	if err != nil {
 		return err
 	}

@@ -1,4 +1,4 @@
-package llmclient
+package askopenai
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"time"
 )
 
-type CaffeineSchema struct {
+type CaffeineIntake struct {
 	Timestamp    time.Time `json:"timestamp"`
 	CaffeineInMg int       `json:"caffeineInMg"`
 }
 
-func (cs CaffeineSchema) MarshalJSON() ([]byte, error) {
+func (cs CaffeineIntake) MarshalJSON() ([]byte, error) {
 	schema := map[string]interface{}{
 		"type": "object",
 		"properties": map[string]interface{}{
@@ -33,16 +33,16 @@ func (cs CaffeineSchema) MarshalJSON() ([]byte, error) {
 	return json.Marshal(schema)
 }
 
-type LlmClient struct {
+type Client struct {
 	client openai.Client
 }
 
-func New() *LlmClient {
+func New() *Client {
 	client := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
-	return &LlmClient{client: *client}
+	return &Client{client: *client}
 }
 
-func (c *LlmClient) AskLlm(userInput string) (CaffeineSchema, error) {
+func (c *Client) Ask(userInput string) (CaffeineIntake, error) {
 	ctx := context.Background()
 	req := openai.ChatCompletionRequest{
 		Model:       openai.GPT3Dot5Turbo,
@@ -65,17 +65,17 @@ func (c *LlmClient) AskLlm(userInput string) (CaffeineSchema, error) {
 	resp, err := c.client.CreateChatCompletion(ctx, req)
 	if err != nil {
 		fmt.Printf("Completion error: %v\n", err)
-		return CaffeineSchema{}, err
+		return CaffeineIntake{}, err
 	}
 
 	// Create an instance of your struct
-	var answer CaffeineSchema
+	var answer CaffeineIntake
 
 	// Unmarshal the JSON into the struct
 	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &answer)
 	if err != nil {
 		fmt.Println("Error:", err)
-		return CaffeineSchema{}, err
+		return CaffeineIntake{}, err
 	}
 	return answer, nil
 }
