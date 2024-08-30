@@ -5,7 +5,10 @@ import (
 )
 
 func commandStatus(cfg *Config, parameter string) error {
-	cfg.Tracker.GetLevel(time.Now())
+	_, err := cfg.Tracker.GetLevel(time.Now().UTC())
+	if err != nil {
+		return err
+	}
 	return nil
 
 }
