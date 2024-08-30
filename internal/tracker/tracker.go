@@ -11,15 +11,15 @@ import (
 const halfLife = 5 * time.Hour //half life of caffeine todo move to config
 
 type LlmClient interface {
-	Ask() (askopenai.CaffeineIntake, error)
+	Ask(input string) (askopenai.CaffeineIntake, error)
 }
 
 type Tracker struct {
 	repository Repository
-	client     askopenai.Client
+	client     LlmClient
 }
 
-func New(repository Repository, client askopenai.Client) *Tracker {
+func New(repository Repository, client LlmClient) *Tracker {
 	return &Tracker{repository: repository, client: client}
 }
 

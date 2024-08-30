@@ -27,12 +27,12 @@ func (r *TestRepository) Add(timestamp time.Time, caffeineInMg int) error {
 type MockClient struct {
 }
 
-func (c *MockClient) AskLlm(input string) (askopenai.CaffeineIntake, error) {
+func (c *MockClient) Ask(input string) (askopenai.CaffeineIntake, error) {
+	timestamp := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
 	return askopenai.CaffeineIntake{
-		Timestamp:    time.Time{},
+		Timestamp:    timestamp,
 		CaffeineInMg: 100,
 	}, nil
-
 }
 
 func TestLevelIsZero(t *testing.T) {
@@ -46,9 +46,9 @@ func TestLevelIsZero(t *testing.T) {
 }
 
 func TestAddCaffeineSameMoment(t *testing.T) {
-	tracker := New(&TestRepository{})
+	tracker := New(&TestRepository{}, &MockClient{})
 	timestamp := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
-	tracker.Add(timestamp, 100)
+	tracker.Add("I'm drinking one big mug of coffee right now.")
 	caffeineLevel, _ := tracker.GetLevel(timestamp)
 
 	if caffeineLevel != 100 {
@@ -57,9 +57,9 @@ func TestAddCaffeineSameMoment(t *testing.T) {
 }
 
 func TestAddCaffeineHalfLife(t *testing.T) {
-	tracker := New(&TestRepository{})
+	tracker := New(&TestRepository{}, &MockClient{})
 	addTime := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
-	tracker.Add(addTime, 100)
+	tracker.Add("I'm drinking one big mug of coffee right now.")
 
 	checkTime := addTime.Add(time.Minute * 300)
 
