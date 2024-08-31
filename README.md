@@ -27,5 +27,7 @@ Warning: So far, I put very limited effort into this project and therefore, usab
 ## Ideas for further improvement
 - Deploy as a webservice
 - Allow deletion of entries
+- Introduce versioning
+- GUI
 
 
