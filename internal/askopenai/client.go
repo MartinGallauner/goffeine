@@ -42,6 +42,8 @@ func New() *Client {
 	return &Client{client: *client}
 }
 
+// Ask takes the string input and throws it against the OpenAI API in expectation
+// of geting the caffaine intake in milligram and a timestamp.
 func (c *Client) Ask(userInput string) (CaffeineIntake, error) {
 	ctx := context.Background()
 	req := openai.ChatCompletionRequest{

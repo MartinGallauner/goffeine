@@ -12,6 +12,7 @@ type CSVRepository struct {
 	csvPath string
 }
 
+// Add appends a new caffeine intake into the csv file
 func (r *CSVRepository) Add(timestamp time.Time, caffeineInMg int) error {
 	// Open the CSV file
 	file, err := os.OpenFile(r.csvPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
