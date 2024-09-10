@@ -31,3 +31,8 @@ Warning: So far, I put very limited effort into this project and therefore, usab
 - GUI
 
 
+## Contributing 
+
+The project is too half baked to accept contributions.
+
+
