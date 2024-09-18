@@ -4,9 +4,11 @@ import (
 	"github.com/MartinGallauner/goffeine/internal/askopenai"
 	"github.com/MartinGallauner/goffeine/internal/repl"
 	"github.com/MartinGallauner/goffeine/internal/repository"
+	"github.com/MartinGallauner/goffeine/internal/server"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
 	"github.com/joho/godotenv"
 	"log"
+	"net/http"
 )
 
 func main() {
@@ -22,5 +24,9 @@ func main() {
 
 	t := tracker.New(csvRepository, client)
 	config := &repl.Config{Tracker: *t}
+
+	handler := http.HandlerFunc(server.GoffeineServer)
+	log.Fatal(http.ListenAndServe(":5000", handler))
+
 	repl.StartRepl(config)
 }
