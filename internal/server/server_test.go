@@ -1,39 +1,40 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func TestGETStatusUser1(t *testing.T) {
-	t.Run("returns current coffeine level of user 1", func(t *testing.T) {
-		request, _ := http.NewRequest(http.MethodGet, "/status/1", nil)
+	t.Run("returns current caffeine level of user 1", func(t *testing.T) {
+		request := newGetStatusRequest("1")
 		response := httptest.NewRecorder()
 
 		GoffeineServer(response, request)
 
-		got := response.Body.String()
-		want := "100mg"
+		assertResponseBody(t, response.Body.String(), "100mg")
+	})
 
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
+	t.Run("returns current caffeine level of user 2", func(t *testing.T) {
+		request := newGetStatusRequest("2")
+		response := httptest.NewRecorder()
+
+		GoffeineServer(response, request)
+
+		assertResponseBody(t, response.Body.String(), "50mg")
 	})
 }
 
-func TestGETStatusUser2(t *testing.T) {
-	t.Run("returns current coffeine level of user 2", func(t *testing.T) {
-		request, _ := http.NewRequest(http.MethodGet, "/status/2", nil)
-		response := httptest.NewRecorder()
+func newGetStatusRequest(userId string) *http.Request {
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/status/%s", userId), nil)
+	return req
+}
 
-		GoffeineServer(response, request)
-
-		got := response.Body.String()
-		want := "50mg"
-
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
-	})
+func assertResponseBody(t testing.TB, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response body is wrong, got %q want %q", got, want)
+	}
 }
