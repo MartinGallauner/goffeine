@@ -7,12 +7,14 @@ import (
 	"testing"
 )
 
-func TestGETStatusUser1(t *testing.T) {
+func TestGETStatusUser(t *testing.T) {
+	server := &GoffeineServer{}
+
 	t.Run("returns current caffeine level of user 1", func(t *testing.T) {
 		request := newGetStatusRequest("1")
 		response := httptest.NewRecorder()
 
-		GoffeineServer(response, request)
+		server.ServeHTTP(response, request)
 
 		assertResponseBody(t, response.Body.String(), "100mg")
 	})
@@ -21,7 +23,7 @@ func TestGETStatusUser1(t *testing.T) {
 		request := newGetStatusRequest("2")
 		response := httptest.NewRecorder()
 
-		GoffeineServer(response, request)
+		server.ServeHTTP(response, request)
 
 		assertResponseBody(t, response.Body.String(), "50mg")
 	})
@@ -37,4 +39,13 @@ func assertResponseBody(t testing.TB, got, want string) {
 	if got != want {
 		t.Errorf("response body is wrong, got %q want %q", got, want)
 	}
+}
+
+type StubStore struct {
+	status map[string]int
+}
+
+func (s *StubStore) GetStatus(name string) int {
+	score := s.status[name]
+	return score
 }
