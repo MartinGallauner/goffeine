@@ -2,35 +2,31 @@ package server
 
 import (
 	"fmt"
+	"github.com/MartinGallauner/goffeine/internal/repository"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
 func TestGETStatusUser(t *testing.T) {
-	server := &GoffeineServer{}
+	server := &GoffeineServer{
+		Tracker: &StubTracker{entries: make([]repository.Entry, 0)},
+	}
 
-	t.Run("returns current caffeine level of user 1", func(t *testing.T) {
+	t.Run("returns current caffeine level of user", func(t *testing.T) {
 		request := newGetStatusRequest("1")
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
 
-		assertResponseBody(t, response.Body.String(), "100mg")
+		assertResponseBody(t, response.Body.String(), "100")
 	})
 
-	t.Run("returns current caffeine level of user 2", func(t *testing.T) {
-		request := newGetStatusRequest("2")
-		response := httptest.NewRecorder()
-
-		server.ServeHTTP(response, request)
-
-		assertResponseBody(t, response.Body.String(), "50mg")
-	})
 }
 
 func newGetStatusRequest(userId string) *http.Request {
-	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/status/%s", userId), nil)
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/status"), nil)
 	return req
 }
 
@@ -41,11 +37,16 @@ func assertResponseBody(t testing.TB, got, want string) {
 	}
 }
 
-type StubStore struct {
-	status map[string]int
+type StubTracker struct {
+	entries []repository.Entry
 }
 
-func (s *StubStore) GetStatus(name string) int {
-	score := s.status[name]
-	return score
+func (s *StubTracker) GetLevel(time time.Time) (int, error) {
+	return 100, nil
+}
+
+func (s *StubTracker) Add(userInput string) error {
+	entry := repository.Entry{Timestamp: time.Now(), CaffeineInMg: 100}
+	s.entries = append(s.entries, entry)
+	return nil
 }

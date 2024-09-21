@@ -3,29 +3,29 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"strings"
+	"time"
 )
 
 type GoffeineServer struct {
-	store CaffeineStore
+	Tracker Tracker
+}
+
+type Tracker interface {
+	GetLevel(time time.Time) (int, error)
+	Add(userInput string) error
 }
 
 func (s *GoffeineServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	user := strings.TrimPrefix(r.URL.Path, "/status/")
-	fmt.Fprint(w, s.store.GetStatus(user))
+	//user := strings.TrimPrefix(r.URL.Path, "/level")
+	//fmt.Fprint(w, s.Store.GetStatus(user))
+
+	if r.URL.Path == "/status" {
+		level, _ := s.Tracker.GetLevel(time.Now()) //todo handle error
+		fmt.Fprint(w, level)
+	}
+
 }
 
 type CaffeineStore interface {
 	GetStatus(user string) int
-}
-
-func GetStatus(user string) string {
-	if user == "1" {
-		return "100mg"
-	}
-
-	if user == "2" {
-		return "50mg"
-	}
-	return ""
 }

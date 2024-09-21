@@ -25,8 +25,8 @@ func main() {
 	t := tracker.New(csvRepository, client)
 	config := &repl.Config{Tracker: *t}
 
-	server := &server.GoffeineServer{}
-	log.Fatal(http.ListenAndServe(":5000", server))
+	server := &server.GoffeineServer{Tracker: t}
+	log.Fatal(http.ListenAndServe(":5001", server))
 
 	repl.StartRepl(config)
 }
