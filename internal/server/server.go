@@ -22,6 +22,13 @@ func (s *GoffeineServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/status" {
 		level, _ := s.Tracker.GetLevel(time.Now()) //todo handle error
 		fmt.Fprint(w, level)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		w.WriteHeader(http.StatusAccepted)
+		fmt.Fprint(w, nil)
+		return
 	}
 
 }
