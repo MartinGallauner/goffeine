@@ -5,6 +5,7 @@ import (
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 )
@@ -38,7 +39,8 @@ func TestPOSTAdd(t *testing.T) {
 	}
 
 	t.Run("Adds one consumption of caffeine", func(t *testing.T) {
-		request, _ := http.NewRequest(http.MethodPost, "/add", nil)
+
+		request, _ := http.NewRequest(http.MethodPost, "/add", strings.NewReader("I had one cup of coffee a minute ago"))
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
@@ -46,8 +48,7 @@ func TestPOSTAdd(t *testing.T) {
 		if response.Code != http.StatusAccepted {
 			t.Errorf("Get status returns %v but expected 202.", response.Code)
 		}
-
-		//assertResponseBody(t, response.Body.String(), "100")
+		assertResponseBody(t, response.Body.String(), "100")
 	})
 }
 

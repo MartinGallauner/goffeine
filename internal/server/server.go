@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 )
@@ -26,7 +27,15 @@ func (s *GoffeineServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "Unable to read request body", http.StatusBadRequest)
+			return
+		}
+		defer r.Body.Close()
 		w.WriteHeader(http.StatusAccepted)
+
+		s.Tracker.Add(string(body))
 		fmt.Fprint(w, nil)
 		return
 	}
