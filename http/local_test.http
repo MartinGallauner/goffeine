@@ -1,0 +1,17 @@
+### GET
+GET http://localhost:5001/status
+
+
+###
+
+### GET
+POST http://localhost:5001/add
+Content-Type: application/json
+
+{
+  "userInput": "one big coffee two minutes ago"
+}
+
+###
+
+###
