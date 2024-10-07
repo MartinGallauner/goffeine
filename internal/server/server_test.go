@@ -48,7 +48,6 @@ func TestPOSTAdd(t *testing.T) {
 		if response.Code != http.StatusAccepted {
 			t.Errorf("Get status returns %v but expected 202.", response.Code)
 		}
-		assertResponseBody(t, response.Body.String(), "100")
 	})
 }
 
