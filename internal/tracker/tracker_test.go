@@ -2,21 +2,20 @@ package tracker
 
 import (
 	"github.com/MartinGallauner/goffeine/internal/askopenai"
-	"github.com/MartinGallauner/goffeine/internal/repository"
 	"testing"
 	"time"
 )
 
 type TestRepository struct {
-	entries []repository.Entry
+	entries []Entry
 }
 
-func (r *TestRepository) Fetch() ([]repository.Entry, error) {
+func (r *TestRepository) Fetch() ([]Entry, error) {
 	return r.entries, nil
 }
 
 func (r *TestRepository) Add(timestamp time.Time, caffeineInMg int) error {
-	entries := append(r.entries, repository.Entry{
+	entries := append(r.entries, Entry{
 		Timestamp:    timestamp,
 		CaffeineInMg: caffeineInMg,
 	})

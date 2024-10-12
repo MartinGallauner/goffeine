@@ -2,13 +2,12 @@ package tracker
 
 import (
 	"github.com/MartinGallauner/goffeine/internal/askopenai"
-	"github.com/MartinGallauner/goffeine/internal/repository"
 	"log"
 	"math"
 	"time"
 )
 
-const halfLife = 5 * time.Hour //half life of caffeine todo move to config
+const halfLife = 5 * time.Hour //half life of caffeine TODO move to config
 
 type LlmClient interface {
 	Ask(input string) (askopenai.CaffeineIntake, error)
@@ -24,12 +23,17 @@ func New(repository Repository, client LlmClient) *Tracker {
 }
 
 type Repository interface {
-	Fetch() ([]repository.Entry, error)
+	Fetch() ([]Entry, error)
 	Add(timestamp time.Time, caffeineInMg int) error
 }
 
+type Entry struct {
+	Timestamp    time.Time
+	CaffeineInMg int
+}
+
 func (tracker *Tracker) GetLevel(now time.Time) (int, error) {
-	//todo cleanup entries older than 24h?
+	// TODO cleanup entries older than 24h?
 
 	entries, err := tracker.repository.Fetch()
 	if err != nil {
@@ -57,7 +61,7 @@ func calculateRemainingCaffeine(initialAmount int, elapsed time.Duration, halfLi
 
 	// Apply the exponential decay formula
 	remainingAmount := float64(initialAmount) * math.Pow(0.5, elapsedMinutes/halfLifeMinutes)
-	return int(remainingAmount) //todo conversion is a bit risky
+	return int(remainingAmount) // TODO conversion is a bit risky
 }
 
 func (tracker *Tracker) Add(userInput string) error {

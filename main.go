@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/MartinGallauner/goffeine/internal/askopenai"
-	"github.com/MartinGallauner/goffeine/internal/repl"
 	"github.com/MartinGallauner/goffeine/internal/repository"
 	"github.com/MartinGallauner/goffeine/internal/server"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
@@ -23,10 +22,10 @@ func main() {
 	client := askopenai.New()
 
 	t := tracker.New(csvRepository, client)
-	config := &repl.Config{Tracker: *t}
+	//config := &repl.Config{Tracker: *t}
 
 	server := &server.GoffeineServer{Tracker: t}
 	log.Fatal(http.ListenAndServe(":5001", server))
 
-	repl.StartRepl(config)
+	//repl.StartRepl(config)
 }

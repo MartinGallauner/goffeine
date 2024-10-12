@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-//todo the database needs to be abstracted away
+// TODO the database needs to be abstracted away
 
 type CSVRepository struct {
 	csvPath string
