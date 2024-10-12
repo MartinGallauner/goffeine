@@ -9,6 +9,19 @@ import (
 
 type GoffeineServer struct {
 	Tracker Tracker
+	Router *http.ServeMux
+}
+
+func NewGoffeineServer(tracker Tracker) *GoffeineServer {
+	s := &GoffeineServer{
+		Tracker: tracker,
+		Router: http.NewServeMux(),
+	}
+
+	s.Router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
+	s.Router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
+
+	return s
 }
 
 type Tracker interface {
@@ -17,17 +30,17 @@ type Tracker interface {
 }
 
 func (s *GoffeineServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	//user := strings.TrimPrefix(r.URL.Path, "/level")
-	//fmt.Fprint(w, s.Store.GetStatus(user))
+	s.Router.ServeHTTP(w,r)
+}
 
-	if r.URL.Path == "/status" {
-		level, _ := s.Tracker.GetLevel(time.Now()) // TODO handle error
+func (s *GoffeineServer) statusHandler(w http.ResponseWriter, r *http.Request) {
+	level, _ := s.Tracker.GetLevel(time.Now()) // TODO handle error
 		fmt.Fprint(w, level)
 		return
-	}
+}
 
-	if r.Method == http.MethodPost {
-		body, err := io.ReadAll(r.Body)
+func (s *GoffeineServer) intakeHandler(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(r.Body)
 		if err != nil {
 			http.Error(w, "Unable to read request body", http.StatusBadRequest)
 			return
@@ -38,10 +51,4 @@ func (s *GoffeineServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.Tracker.Add(string(body))
 		fmt.Fprint(w, nil)
 		return
-	}
-
-}
-
-type CaffeineStore interface {
-	GetStatus(user string) int
 }

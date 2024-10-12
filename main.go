@@ -21,6 +21,6 @@ func main() {
 	client := askopenai.New()
 
 	t := tracker.New(repository, client)
-	server := &server.GoffeineServer{Tracker: t}
+	server := server.NewGoffeineServer(t)
 	log.Fatal(http.ListenAndServe(":5001", server))
 }
