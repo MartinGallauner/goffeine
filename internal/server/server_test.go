@@ -11,9 +11,7 @@ import (
 )
 
 func TestGETStatusUser(t *testing.T) {
-	server := &GoffeineServer{
-		Tracker: &StubTracker{entries: make([]tracker.Entry, 0)},
-	}
+	server := NewGoffeineServer(&StubTracker{entries: make([]tracker.Entry, 0)})
 
 	t.Run("returns current caffeine level of user", func(t *testing.T) {
 		request := newGetStatusRequest("1")
@@ -29,18 +27,16 @@ func TestGETStatusUser(t *testing.T) {
 }
 
 func newGetStatusRequest(userId string) *http.Request {
-	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/status"), nil)
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/api/status"), nil)
 	return req
 }
 
 func TestPOSTAdd(t *testing.T) {
-	server := &GoffeineServer{
-		Tracker: &StubTracker{entries: make([]tracker.Entry, 0)},
-	}
+	server := NewGoffeineServer(&StubTracker{entries: make([]tracker.Entry, 0)})
 
 	t.Run("Adds one consumption of caffeine", func(t *testing.T) {
 
-		request, _ := http.NewRequest(http.MethodPost, "/add", strings.NewReader("I had one cup of coffee a minute ago"))
+		request, _ := http.NewRequest(http.MethodPost, "/api/add", strings.NewReader("I had one cup of coffee a minute ago"))
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)

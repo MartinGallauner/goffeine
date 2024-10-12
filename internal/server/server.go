@@ -9,17 +9,19 @@ import (
 
 type GoffeineServer struct {
 	Tracker Tracker
-	Router *http.ServeMux
+	http.Handler
 }
 
 func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 	s := &GoffeineServer{
 		Tracker: tracker,
-		Router: http.NewServeMux(),
 	}
 
-	s.Router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
-	s.Router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
+	router := http.NewServeMux()
+	router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
+	router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
+
+	s.Handler = router
 
 	return s
 }
@@ -27,10 +29,6 @@ func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 type Tracker interface {
 	GetLevel(time time.Time) (int, error)
 	Add(userInput string) error
-}
-
-func (s *GoffeineServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	s.Router.ServeHTTP(w,r)
 }
 
 func (s *GoffeineServer) statusHandler(w http.ResponseWriter, r *http.Request) {
