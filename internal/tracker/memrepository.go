@@ -24,10 +24,12 @@ func (r *MemoryRepository) Add(timestamp time.Time, caffeineInMg int) error {
 		CaffeineInMg: caffeineInMg,
 	}
 
-	r.Entries[1] = []Entry{e}
+
+	if r.Entries[1] == nil {
+		r.Entries[1] = []Entry{e}
+	} else {
+		r.Entries[1] = append(r.Entries[1], e)
+	}
 
 	return nil
-
-	
-	
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/MartinGallauner/goffeine/internal/askopenai"
-	"github.com/MartinGallauner/goffeine/internal/repository"
 	"github.com/MartinGallauner/goffeine/internal/server"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
 	"github.com/joho/godotenv"
@@ -18,10 +17,10 @@ func main() {
 		log.Fatal("Failed trying to load env variables.")
 	}
 
-	csvRepository := repository.New("data/data.csv")
+	repository := tracker.NewMemoryRepository()
 	client := askopenai.New()
 
-	t := tracker.New(csvRepository, client)
+	t := tracker.New(repository, client)
 	//config := &repl.Config{Tracker: *t}
 
 	server := &server.GoffeineServer{Tracker: t}
