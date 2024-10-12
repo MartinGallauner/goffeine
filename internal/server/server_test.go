@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github.com/MartinGallauner/goffeine/internal/repository"
+	"github.com/MartinGallauner/goffeine/internal/tracker"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -12,7 +12,7 @@ import (
 
 func TestGETStatusUser(t *testing.T) {
 	server := &GoffeineServer{
-		Tracker: &StubTracker{entries: make([]repository.Entry, 0)},
+		Tracker: &StubTracker{entries: make([]tracker.Entry, 0)},
 	}
 
 	t.Run("returns current caffeine level of user", func(t *testing.T) {
@@ -35,7 +35,7 @@ func newGetStatusRequest(userId string) *http.Request {
 
 func TestPOSTAdd(t *testing.T) {
 	server := &GoffeineServer{
-		Tracker: &StubTracker{entries: make([]repository.Entry, 0)},
+		Tracker: &StubTracker{entries: make([]tracker.Entry, 0)},
 	}
 
 	t.Run("Adds one consumption of caffeine", func(t *testing.T) {
@@ -59,7 +59,7 @@ func assertResponseBody(t testing.TB, got, want string) {
 }
 
 type StubTracker struct {
-	entries []repository.Entry
+	entries []tracker.Entry
 }
 
 func (s *StubTracker) GetLevel(time time.Time) (int, error) {
@@ -67,7 +67,7 @@ func (s *StubTracker) GetLevel(time time.Time) (int, error) {
 }
 
 func (s *StubTracker) Add(userInput string) error {
-	entry := repository.Entry{Timestamp: time.Now(), CaffeineInMg: 100}
+	entry := tracker.Entry{Timestamp: time.Now(), CaffeineInMg: 100}
 	s.entries = append(s.entries, entry)
 	return nil
 }
