@@ -20,6 +20,7 @@ func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 	router := http.NewServeMux()
 	router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
 	router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
+	router.Handle("/", http.HandlerFunc(s.htmlHandler))
 
 	s.Handler = router
 
@@ -29,6 +30,28 @@ func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 type Tracker interface {
 	GetLevel(time time.Time) (int, error)
 	Add(userInput string) error
+}
+
+func (s *GoffeineServer) htmlHandler(w http.ResponseWriter, r *http.Request) {
+
+	html := `
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Simple Go HTML Server</title>
+	</head>
+	<body>
+		<h1>Hello from Go!</h1>
+		<p>This is a simple HTML page served by a Go application.</p>
+	</body>
+	</html>
+	`
+	
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, html)
+
 }
 
 func (s *GoffeineServer) statusHandler(w http.ResponseWriter, r *http.Request) {

@@ -47,6 +47,29 @@ func TestPOSTAdd(t *testing.T) {
 	})
 }
 
+func TestGETHome(t *testing.T) {
+	server := NewGoffeineServer(&StubTracker{entries: make([]tracker.Entry, 0)})
+
+	t.Run("Gets main page as html", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		if response.Code != http.StatusOK {
+			t.Errorf("Returns status %v but expected 200", response.Code)
+		}
+
+		if !strings.Contains(response.Body.String(), "<html") {
+			t.Error("Expected the <html tag in the response")
+
+		}
+
+
+	})
+
+}
+
 func assertResponseBody(t testing.TB, got, want string) {
 	t.Helper()
 	if got != want {
