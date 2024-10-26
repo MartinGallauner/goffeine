@@ -21,18 +21,37 @@ func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 	router := http.NewServeMux()
 	router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
 	router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
-
-	component := page(0)
-	router.Handle("/", templ.Handler(component))
-
+	router.Handle("/", http.HandlerFunc(s.handlePage))
+	
 	s.Handler = router
-
 	return s
 }
 
 type Tracker interface {
 	GetLevel(time time.Time) (int, error)
 	Add(userInput string) error
+}
+
+func (s *GoffeineServer) handlePage(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		level,_ := s.Tracker.GetLevel(time.Now())
+		component := page(level)
+		templ.Handler(component).ServeHTTP(w, r)
+	case http.MethodPost:
+		s.handlePagePost(w, r)		
+	default:
+		http.Error(w, "Method not allowed, go away", http.StatusMethodNotAllowed)	
+	}
+}
+
+func (s *GoffeineServer) handlePagePost(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	if r.Form.Has("textinput") {
+		input := r.Form.Get("textinput")
+		s.Tracker.Add(input)
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 
