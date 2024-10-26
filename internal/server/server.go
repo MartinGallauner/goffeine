@@ -21,9 +21,8 @@ func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 	router := http.NewServeMux()
 	router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
 	router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
-	//router.Handle("/", http.HandlerFunc(s.htmlHandler))
 
-	component := hello("galle")
+	component := page(0)
 	router.Handle("/", templ.Handler(component))
 
 	s.Handler = router
@@ -36,14 +35,6 @@ type Tracker interface {
 	Add(userInput string) error
 }
 
-func (s *GoffeineServer) htmlHandler(w http.ResponseWriter, r *http.Request) {
-
-	component := hello("galle")
-
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, component)
-
-}
 
 func (s *GoffeineServer) statusHandler(w http.ResponseWriter, r *http.Request) {
 	level, _ := s.Tracker.GetLevel(time.Now()) // TODO handle error

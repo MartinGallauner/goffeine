@@ -1,15 +1,15 @@
 ### GET
-GET http://localhost:5001/status
+GET http://localhost:5001/api/status
 
 
 ###
 
 ### GET
-POST http://localhost:5001/add
+POST http://localhost:5001/api/add
 Content-Type: application/json
 
 {
-  "userInput": "one big coffee two minutes ago"
+  "userInput": "one medium coffee two hours ago"
 }
 
 ###

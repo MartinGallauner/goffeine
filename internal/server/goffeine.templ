@@ -1,0 +1,27 @@
+package server
+
+import "strconv"
+
+templ page(caffeineLevel int) {
+	@level(caffeineLevel)
+	@input()
+}
+
+templ level(caffeineLevel int) {
+	<div>your caffeine level is: { strconv.Itoa(caffeineLevel) }</div>
+}
+
+templ input() {
+	<form action="/" method="POST">
+		 <div>
+            <input 
+                type="text" 
+                name="textinput" 
+                placeholder="Enter your text" 
+                class="mb-2 p-2 border rounded"
+            />
+        </div>
+		<div><button type="submit" name="textinput" value="textinput">Send</button></div>
+
+	</form>
+}
