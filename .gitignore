@@ -29,7 +29,6 @@ go.work.sum
 .vscode
 .idea
 
-
 # data
 data/
 */testdata/
@@ -37,7 +36,5 @@ data/
 data/data.csv
 data.csv
 
-
 # templ generated
 *_templ.go
-
