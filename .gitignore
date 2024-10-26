@@ -25,11 +25,19 @@ go.work.sum
 # env file
 .env
 
+# IDE Stuff
+.vscode
+.idea
+
+
 # data
 data/
 */testdata/
 *.csv
 data/data.csv
 data.csv
-goffeine
+
+
+# templ generated
+*_templ.go
 
