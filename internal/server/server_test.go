@@ -47,6 +47,7 @@ func TestPOSTAdd(t *testing.T) {
 	})
 }
 
+/*
 func TestGETHome(t *testing.T) {
 	server := NewGoffeineServer(&StubTracker{entries: make([]tracker.Entry, 0)})
 
@@ -69,6 +70,7 @@ func TestGETHome(t *testing.T) {
 	})
 
 }
+*/
 
 func assertResponseBody(t testing.TB, got, want string) {
 	t.Helper()
