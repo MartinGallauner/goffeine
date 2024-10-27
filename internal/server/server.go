@@ -6,14 +6,16 @@ import (
 	"net/http"
 	"time"
 	"github.com/a-h/templ"
+	"github.com/alexedwards/scs/v2"
 )
 
 type GoffeineServer struct {
 	Tracker Tracker
 	http.Handler
+	SessionManager *scs.SessionManager
 }
 
-func NewGoffeineServer(tracker Tracker) *GoffeineServer {
+func NewGoffeineServer(tracker Tracker, sessionManager *scs.SessionManager) *GoffeineServer {
 	s := &GoffeineServer{
 		Tracker: tracker,
 	}
@@ -22,8 +24,10 @@ func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 	router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
 	router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
 	router.Handle("/", http.HandlerFunc(s.handlePage))
+
+	routerWithMiddleware := sessionManager.LoadAndSave(router)
 	
-	s.Handler = router
+	s.Handler = routerWithMiddleware
 	return s
 }
 
