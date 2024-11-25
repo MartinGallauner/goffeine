@@ -4,7 +4,7 @@ test:
 	go test -v ./...
 
 build:
-	go build -o goffeine .
+	templ generate && go build -o goffeine .
 
 run:
 	go run .
