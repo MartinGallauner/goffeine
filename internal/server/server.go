@@ -2,20 +2,19 @@ package server
 
 import (
 	"fmt"
+	"github.com/a-h/templ"
 	"io"
 	"net/http"
 	"time"
-	"github.com/a-h/templ"
-	"github.com/alexedwards/scs/v2"
 )
 
 type GoffeineServer struct {
 	Tracker Tracker
 	http.Handler
-	SessionManager *scs.SessionManager
+	SessionManager SessionManager
 }
 
-func NewGoffeineServer(tracker Tracker, sessionManager *scs.SessionManager) *GoffeineServer {
+func NewGoffeineServer(tracker Tracker, sessionManager SessionManager) *GoffeineServer {
 	s := &GoffeineServer{
 		Tracker: tracker,
 	}
@@ -26,7 +25,7 @@ func NewGoffeineServer(tracker Tracker, sessionManager *scs.SessionManager) *Gof
 	router.Handle("/", http.HandlerFunc(s.handlePage))
 
 	routerWithMiddleware := sessionManager.LoadAndSave(router)
-	
+
 	s.Handler = routerWithMiddleware
 	return s
 }
@@ -36,16 +35,20 @@ type Tracker interface {
 	Add(userInput string) error
 }
 
+type SessionManager interface {
+	LoadAndSave(http.Handler) http.Handler
+}
+
 func (s *GoffeineServer) handlePage(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		level,_ := s.Tracker.GetLevel(time.Now())
+		level, _ := s.Tracker.GetLevel(time.Now())
 		component := page(level)
 		templ.Handler(component).ServeHTTP(w, r)
 	case http.MethodPost:
-		s.handlePagePost(w, r)		
+		s.handlePagePost(w, r)
 	default:
-		http.Error(w, "Method not allowed, go away", http.StatusMethodNotAllowed)	
+		http.Error(w, "Method not allowed, go away", http.StatusMethodNotAllowed)
 	}
 }
 
@@ -57,7 +60,6 @@ func (s *GoffeineServer) handlePagePost(w http.ResponseWriter, r *http.Request) 
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
-
 
 func (s *GoffeineServer) statusHandler(w http.ResponseWriter, r *http.Request) {
 	level, _ := s.Tracker.GetLevel(time.Now()) // TODO handle error

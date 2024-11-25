@@ -11,7 +11,7 @@ import (
 )
 
 func TestGETStatusUser(t *testing.T) {
-	server := NewGoffeineServer(&StubTracker{entries: make([]tracker.Entry, 0)})
+	server := NewGoffeineServer(&StubTracker{entries: make([]tracker.Entry, 0)}, &StubSessionManager{})
 
 	t.Run("returns current caffeine level of user", func(t *testing.T) {
 		request := newGetStatusRequest("1")
@@ -32,7 +32,7 @@ func newGetStatusRequest(userId string) *http.Request {
 }
 
 func TestPOSTAdd(t *testing.T) {
-	server := NewGoffeineServer(&StubTracker{entries: make([]tracker.Entry, 0)})
+	server := NewGoffeineServer(&StubTracker{entries: make([]tracker.Entry, 0)}, &StubSessionManager{})
 
 	t.Run("Adds one consumption of caffeine", func(t *testing.T) {
 
@@ -81,6 +81,13 @@ func assertResponseBody(t testing.TB, got, want string) {
 
 type StubTracker struct {
 	entries []tracker.Entry
+}
+
+type StubSessionManager struct {
+}
+
+func (s *StubSessionManager) LoadAndSave(handler http.Handler) http.Handler {
+	return handler
 }
 
 func (s *StubTracker) GetLevel(time time.Time) (int, error) {
