@@ -6,6 +6,6 @@ RUN go install github.com/a-h/templ/cmd/templ@latest &&\
 
 FROM debian:stable-slim
 COPY --from=builder /app/goffeine /bin/goffeine
-COPY .env /.env
+#COPY .env /.env
 RUN apt-get update && apt-get install -y ca-certificates
 CMD ["/bin/goffeine"]

@@ -16,7 +16,8 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Failed trying to load env variables.")
+		//log.Fatal("Failed trying to load env variables.")
+		log.Print("Failed trying to load the .env file.")
 	}
 
 	repository := tracker.NewMemoryRepository()
