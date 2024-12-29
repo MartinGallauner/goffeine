@@ -15,7 +15,7 @@ func main() {
 	log.Println("Started Goffeine")
 
 	err := godotenv.Load()
-	if err != nil {
+	if err != nil { //todo I need to figure out how to handle that
 		//log.Fatal("Failed trying to load env variables.")
 		log.Print("Failed trying to load the .env file.")
 	}
