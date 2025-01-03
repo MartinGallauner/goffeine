@@ -1,3 +1,5 @@
+![CI status](https://github.com/MartinGallauner/goffeine/actions/workflows/ci.yml/badge.svg)
+
 # Goffeine
 
 ## About
