@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
 	"net/http"
 	"net/http/httptest"
@@ -27,7 +26,7 @@ func TestGETStatusUser(t *testing.T) {
 }
 
 func newGetStatusRequest(userId string) *http.Request {
-	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/api/status"), nil)
+	req, _ := http.NewRequest(http.MethodGet, "/api/status", nil)
 	return req
 }
 
