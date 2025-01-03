@@ -17,12 +17,12 @@ jobs:
     - uses: actions/checkout@v4  
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
-        go-version: '1.23'
+        go-version: '1.23.4'
 
     - name: Install Templ
-      run: go install github.com/a-h/templ/cmd/templ@latest   
+      run: go install github.com/a-h/templ/cmd/templ@v0.3.819
 
     - name: Generate Templ
       run: templ generate
@@ -48,7 +48,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.23.0"
+          go-version: "1.23.4"
       - name: run go fmt
         run: test -z $(go fmt ./...)
       - name: Install staticcheck
