@@ -8,6 +8,6 @@ require (
 )
 
 require (
-	github.com/a-h/templ v0.2.793 // indirect
+	github.com/a-h/templ v0.3.819 // indirect
 	github.com/alexedwards/scs/v2 v2.8.0 // indirect
 )
