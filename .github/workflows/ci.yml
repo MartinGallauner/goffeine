@@ -1,5 +1,7 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+# This workflow provides basic CI for Goffeine.
+# The first build job should provide early feedback. The second job "quality_check" runs tests,
+# validates the formatting and makes use of the tools staticcheck and gosec.
+
 
 name: CI
 
@@ -11,9 +13,8 @@ on:
 
 jobs:
 
-
-
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4  
