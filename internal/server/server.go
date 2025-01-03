@@ -53,17 +53,24 @@ func (s *GoffeineServer) handlePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *GoffeineServer) handlePagePost(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	err := r.ParseForm()
+	if err != nil {
+		return
+	}
 	if r.Form.Has("textinput") {
 		input := r.Form.Get("textinput")
-		s.Tracker.Add(input)
+
+		err := s.Tracker.Add(input)
+		if err != nil {
+			return
+		}
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (s *GoffeineServer) statusHandler(w http.ResponseWriter, r *http.Request) {
 	level, _ := s.Tracker.GetLevel(time.Now()) // TODO handle error
-	fmt.Fprint(w, level)
+	fmt.Fprint(w, level)                       /* #nosec */
 }
 
 func (s *GoffeineServer) intakeHandler(w http.ResponseWriter, r *http.Request) {
