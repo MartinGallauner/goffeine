@@ -64,6 +64,7 @@ func (s *GoffeineServer) handlePagePost(w http.ResponseWriter, r *http.Request) 
 func (s *GoffeineServer) statusHandler(w http.ResponseWriter, r *http.Request) {
 	level, _ := s.Tracker.GetLevel(time.Now()) // TODO handle error
 	fmt.Fprint(w, level)
+	return
 }
 
 func (s *GoffeineServer) intakeHandler(w http.ResponseWriter, r *http.Request) {
@@ -77,4 +78,5 @@ func (s *GoffeineServer) intakeHandler(w http.ResponseWriter, r *http.Request) {
 
 	s.Tracker.Add(string(body))
 	fmt.Fprint(w, nil)
+	return
 }
