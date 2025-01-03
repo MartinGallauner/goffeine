@@ -11,6 +11,8 @@ on:
 
 jobs:
 
+
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -27,7 +29,7 @@ jobs:
     - name: Build
       run: make build
 
-  quality check:
+  quality_check:
     name: Quality Check
     runs-on: ubuntu-latest
     steps:
