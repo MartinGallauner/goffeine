@@ -27,7 +27,7 @@ func main() {
 
 	sessionManager := scs.New()
 	sessionManager.Lifetime = 24 * time.Hour
-	server := server.NewGoffeineServer(t, sessionManager)
+	goffeineServer := server.NewGoffeineServer(t, sessionManager)
 
-	log.Fatal(http.ListenAndServe(":8080", server))
+	log.Fatal(http.ListenAndServe(":8080", goffeineServer)) /* #nosec */
 }

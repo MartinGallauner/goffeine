@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/a-h/templ"
 	"io"
+	"log"
 	"net/http"
 	"time"
 )
@@ -82,6 +83,10 @@ func (s *GoffeineServer) intakeHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	w.WriteHeader(http.StatusAccepted)
 
-	s.Tracker.Add(string(body))
+	err = s.Tracker.Add(string(body))
+	if err != nil {
+		log.Printf("While adding to the tracker, the following error occured: %v", err)
+		return
+	}
 	fmt.Fprint(w, nil)
 }
