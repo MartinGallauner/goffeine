@@ -33,6 +33,7 @@ jobs:
 
   quality_check:
     name: Quality Check
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
