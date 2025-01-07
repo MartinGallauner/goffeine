@@ -56,3 +56,5 @@ jobs:
           project_id: goffeine
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
+      - name: push image
+        run: gcloud builds submit --tag europe-west3-docker.pkg.dev/goffeine/goffeine/goffeine:latest
