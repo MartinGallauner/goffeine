@@ -3,12 +3,12 @@
 # branch.
 #
 
-name: 'CD'
+name: 'Delivery'
 
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [ "CI" ]
+    workflows: [ "Integration" ]
     types: [ completed ]
     branches: [ main ]
   
