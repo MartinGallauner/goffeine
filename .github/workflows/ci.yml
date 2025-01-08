@@ -3,7 +3,7 @@
 # validates the formatting and makes use of the tools staticcheck and gosec.
 
 
-name: 'Continuous Integration'
+name: 'Integration'
 
 on:
   workflow_dispatch:
