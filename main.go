@@ -31,13 +31,18 @@ func main() {
 	sessionManager.Lifetime = 24 * time.Hour
 	goffeineServer := server.NewGoffeineServer(t, sessionManager)
 
+	port := getPort()
+
+	log.Printf("Starting Goffeine on port %s", port)
+	addr := fmt.Sprintf(":%s", port)
+	log.Fatal(http.ListenAndServe(addr, goffeineServer)) /* #nosec */
+}
+
+func getPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Printf("No port set. Using %s as default.", DEFAULT_PORT)
 		port = DEFAULT_PORT
 	}
-
-	log.Printf("Starting Goffeine on port %s", port)
-	addr := fmt.Sprintf(":%s", port)
-	log.Fatal(http.ListenAndServe(addr, goffeineServer)) /* #nosec */
+	return port
 }
