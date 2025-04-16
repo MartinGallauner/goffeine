@@ -29,7 +29,7 @@ func main() {
 
 	sessionManager := scs.New()
 	sessionManager.Lifetime = 24 * time.Hour
-	goffeineServer := server.NewGoffeineServer(t, sessionManager)
+	goffeineServer := server.NewGoffeineServer(t)
 
 	port := getPort()
 
