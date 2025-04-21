@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"fmt"
 	"github.com/a-h/templ"
 	"io"
@@ -18,8 +17,7 @@ type GoffeineServer struct {
 
 func NewGoffeineServer(tracker Tracker, sessionManager SessionManager) *GoffeineServer {
 	s := &GoffeineServer{
-		Tracker:        tracker,
-		SessionManager: sessionManager,
+		Tracker: tracker,
 	}
 
 	router := http.NewServeMux()
@@ -40,16 +38,9 @@ type Tracker interface {
 
 type SessionManager interface {
 	LoadAndSave(http.Handler) http.Handler
-	GetString(context.Context, string) string
-	Put(context.Context, string, interface{})
 }
 
 func (s *GoffeineServer) handlePage(w http.ResponseWriter, r *http.Request) {
-
-	s.SessionManager.Put(r.Context(), "message", "Hello from a session!")
-	msg := s.SessionManager.GetString(r.Context(), "message")
-	log.Print(msg)
-
 	switch r.Method {
 	case http.MethodGet:
 		level, _ := s.Tracker.GetLevel(time.Now())
