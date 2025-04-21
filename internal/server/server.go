@@ -13,17 +13,23 @@ import (
 type GoffeineServer struct {
 	Tracker Tracker
 	http.Handler
+	SessionManager SessionManager
 }
 
-func NewGoffeineServer(tracker Tracker) *GoffeineServer {
+func NewGoffeineServer(tracker Tracker, sessionManager SessionManager) *GoffeineServer {
 	s := &GoffeineServer{
-		Tracker: tracker,
+		Tracker:        tracker,
+		SessionManager: sessionManager,
 	}
 
 	router := http.NewServeMux()
 	router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
 	router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
 	router.Handle("/", http.HandlerFunc(s.handlePage))
+
+	routerWithMiddleware := sessionManager.LoadAndSave(router)
+
+	s.Handler = routerWithMiddleware
 	return s
 }
 
@@ -39,6 +45,10 @@ type SessionManager interface {
 }
 
 func (s *GoffeineServer) handlePage(w http.ResponseWriter, r *http.Request) {
+
+	s.SessionManager.Put(r.Context(), "message", "Hello from a session!")
+	msg := s.SessionManager.GetString(r.Context(), "message")
+	log.Print(msg)
 
 	switch r.Method {
 	case http.MethodGet:
