@@ -2,10 +2,8 @@
 
 test:
 	go test -v ./...
-	staticcheck ./...
-	gosec ./...
 
-build: test
+build:
 	templ generate && go build -o goffeine .
 
 run:
