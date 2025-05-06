@@ -1,7 +1,7 @@
 package tracker
 
 import (
-	"github.com/MartinGallauner/goffeine/internal/askopenai"
+	"github.com/MartinGallauner/goffeine/internal/ask"
 	"testing"
 	"time"
 )
@@ -26,9 +26,9 @@ func (r *TestRepository) Add(timestamp time.Time, caffeineInMg int) error {
 type MockClient struct {
 }
 
-func (c *MockClient) Ask(input string) (askopenai.CaffeineIntake, error) {
+func (c *MockClient) Ask(input string) (ask.CaffeineIntake, error) {
 	timestamp := time.Date(2024, time.August, 26, 11, 53, 25, 0, time.UTC)
-	return askopenai.CaffeineIntake{
+	return ask.CaffeineIntake{
 		Timestamp:    timestamp,
 		CaffeineInMg: 100,
 	}, nil

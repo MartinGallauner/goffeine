@@ -1,4 +1,4 @@
-package askopenai
+package ask
 
 import (
 	"context"

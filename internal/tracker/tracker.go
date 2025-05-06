@@ -1,7 +1,7 @@
 package tracker
 
 import (
-	"github.com/MartinGallauner/goffeine/internal/askopenai"
+	"github.com/MartinGallauner/goffeine/internal/ask"
 	"log"
 	"math"
 	"time"
@@ -10,7 +10,7 @@ import (
 const halfLife = 5 * time.Hour //half life of caffeine TODO move to config
 
 type LlmClient interface {
-	Ask(input string) (askopenai.CaffeineIntake, error)
+	Ask(input string) (ask.CaffeineIntake, error)
 }
 
 type Tracker struct {

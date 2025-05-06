@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/MartinGallauner/goffeine/internal/askopenai"
+	"github.com/MartinGallauner/goffeine/internal/ask"
 	"github.com/MartinGallauner/goffeine/internal/server"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
 	"github.com/alexedwards/scs/v2"
@@ -20,7 +20,7 @@ func main() {
 	}
 
 	repository := tracker.NewMemoryRepository()
-	client := askopenai.New()
+	client := ask.New()
 
 	t := tracker.New(repository, client)
 
