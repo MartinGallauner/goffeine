@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/MartinGallauner/goffeine/internal/askopenai"
 	"github.com/MartinGallauner/goffeine/internal/server"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
@@ -8,15 +9,13 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 func main() {
-	log.Println("Started Goffeine")
-
 	err := godotenv.Load()
 	if err != nil { //todo I need to figure out how to handle that
-		//log.Fatal("Failed trying to load env variables.")
 		log.Print("Failed trying to load the .env file.")
 	}
 
@@ -29,5 +28,12 @@ func main() {
 	sessionManager.Lifetime = 24 * time.Hour
 	goffeineServer := server.NewGoffeineServer(t, sessionManager)
 
-	log.Fatal(http.ListenAndServe(":8080", goffeineServer)) /* #nosec */
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	addr := fmt.Sprintf(":%s", port)
+	log.Printf("Started Goffeine on port: %s", port)
+	log.Fatal(http.ListenAndServe(addr, goffeineServer)) /* #nosec */
 }
