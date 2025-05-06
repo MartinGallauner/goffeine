@@ -8,7 +8,7 @@ test:
 	test -z $(go fmt ./...) && go test -v ./... && staticcheck ./... && gosec ./...
 
 .PHONY: build
-build: test
+build:
 	templ generate && go build -o goffeine .
 
 .PHONY: run
