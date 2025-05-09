@@ -8,6 +8,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/joho/godotenv"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"time"
@@ -15,7 +16,7 @@ import (
 
 func main() {
 	err := godotenv.Load()
-	if err != nil { //todo I need to figure out how to handle that
+	if err != nil { //TODO I need to figure out how to handle .env files in deployment
 		log.Print("Failed trying to load the .env file.")
 	}
 
@@ -34,6 +35,6 @@ func main() {
 	}
 
 	addr := fmt.Sprintf(":%s", port)
-	log.Printf("Started Goffeine on port: %s", port)
+	slog.Info("Started Goffeine on port: %s", port)
 	log.Fatal(http.ListenAndServe(addr, goffeineServer)) /* #nosec */
 }
