@@ -9,8 +9,8 @@ test:
 
 .PHONY: build
 build:
-	templ generate && go build -o goffeine ./cmd
+	templ generate && go build -o bin/goffeine ./cmd
 
 .PHONY: run
-run:
-	go run .
+run: build
+	./bin/goffeine
