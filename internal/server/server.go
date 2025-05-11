@@ -85,7 +85,7 @@ func (s *GoffeineServer) intakeHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = s.Tracker.Add(string(body))
 	if err != nil {
-		slog.Info("While adding to the tracker, the following error occured: %v", err)
+		slog.Info("While adding to the tracker, the following error occurred", "error", err)
 		return
 	}
 	fmt.Fprint(w, nil)

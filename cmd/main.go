@@ -35,6 +35,6 @@ func main() {
 	}
 
 	addr := fmt.Sprintf(":%s", port)
-	slog.Info("Started Goffeine on port: %s", port)
+	slog.Info("Started Goffeine on:", "port", port)
 	log.Fatal(http.ListenAndServe(addr, goffeineServer)) /* #nosec */
 }
