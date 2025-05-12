@@ -1,10 +1,8 @@
 package server
 
 import (
-	"fmt"
+	"github.com/MartinGallauner/goffeine/internal/handler"
 	"github.com/a-h/templ"
-	"io"
-	"log/slog"
 	"net/http"
 	"time"
 )
@@ -20,9 +18,11 @@ func NewGoffeineServer(tracker Tracker, sessionManager SessionManager) *Goffeine
 		Tracker: tracker,
 	}
 
+	handlers := handler.New(tracker)
+
 	router := http.NewServeMux()
-	router.Handle("/api/status", http.HandlerFunc(s.statusHandler))
-	router.Handle("/api/add", http.HandlerFunc(s.intakeHandler))
+	router.Handle("/api/status", http.HandlerFunc(handlers.Status))
+	router.Handle("/api/add", http.HandlerFunc(handlers.Intake))
 	router.Handle("/", http.HandlerFunc(s.handlePage))
 
 	routerWithMiddleware := sessionManager.LoadAndSave(router)
@@ -67,26 +67,4 @@ func (s *GoffeineServer) handlePagePost(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
-}
-
-func (s *GoffeineServer) statusHandler(w http.ResponseWriter, r *http.Request) {
-	level, _ := s.Tracker.GetLevel(time.Now()) // TODO handle error
-	fmt.Fprint(w, level)                       /* #nosec */
-}
-
-func (s *GoffeineServer) intakeHandler(w http.ResponseWriter, r *http.Request) {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Unable to read request body", http.StatusBadRequest)
-		return
-	}
-	defer r.Body.Close()
-	w.WriteHeader(http.StatusAccepted)
-
-	err = s.Tracker.Add(string(body))
-	if err != nil {
-		slog.Info("While adding to the tracker, the following error occurred", "error", err)
-		return
-	}
-	fmt.Fprint(w, nil)
 }
