@@ -1,4 +1,4 @@
-package server
+package handler
 
 import "strconv"
 
@@ -14,10 +14,10 @@ templ level(caffeineLevel int) {
 templ input() {
 	<form action="/" method="POST">
 		 <div>
-            <input 
-                type="text" 
-                name="textinput" 
-                placeholder="What did you consume when?" 
+            <input
+                type="text"
+                name="textinput"
+                placeholder="What did you consume when?"
                 class="mb-2 p-2 border rounded"
             />
         </div>

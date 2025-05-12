@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/MartinGallauner/goffeine/internal/handler"
-	"github.com/a-h/templ"
 	"net/http"
 	"time"
 )
@@ -23,7 +22,7 @@ func NewGoffeineServer(tracker Tracker, sessionManager SessionManager) *Goffeine
 	router := http.NewServeMux()
 	router.Handle("/api/status", http.HandlerFunc(handlers.Status))
 	router.Handle("/api/add", http.HandlerFunc(handlers.Intake))
-	router.Handle("/", http.HandlerFunc(s.handlePage))
+	router.Handle("/", http.HandlerFunc(handlers.Page))
 
 	routerWithMiddleware := sessionManager.LoadAndSave(router)
 
@@ -38,33 +37,4 @@ type Tracker interface {
 
 type SessionManager interface {
 	LoadAndSave(http.Handler) http.Handler
-}
-
-func (s *GoffeineServer) handlePage(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		level, _ := s.Tracker.GetLevel(time.Now())
-		component := page(level)
-		templ.Handler(component).ServeHTTP(w, r)
-	case http.MethodPost:
-		s.handlePagePost(w, r)
-	default:
-		http.Error(w, "Method not allowed, go away", http.StatusMethodNotAllowed)
-	}
-}
-
-func (s *GoffeineServer) handlePagePost(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		return
-	}
-	if r.Form.Has("textinput") {
-		input := r.Form.Get("textinput")
-
-		err := s.Tracker.Add(input)
-		if err != nil {
-			return
-		}
-	}
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
