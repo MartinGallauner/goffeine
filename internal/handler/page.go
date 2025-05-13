@@ -21,7 +21,8 @@ func (h *PageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		level, _ := h.tracker.GetLevel(time.Now())
 		component := page(level)
-		templ.Handler(component).ServeHTTP(w, r)
+		layout := Layout(component, "Goffeine") //todo review
+		templ.Handler(layout).ServeHTTP(w, r)
 	case http.MethodPost:
 		h.handlePagePost(w, r)
 	default:

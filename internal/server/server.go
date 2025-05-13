@@ -22,6 +22,9 @@ func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 	router.Handle("/api/status", http.HandlerFunc(handlers.Status))
 	router.Handle("/api/add", http.HandlerFunc(handlers.Intake))
 	router.Handle("/", http.HandlerFunc(handlers.Page))
+
+	fileServer := http.FileServer(http.Dir("./assets/dist"))
+	router.Handle("/assets/", http.StripPrefix("/assets/", fileServer))
 	s.Handler = router
 	return s
 }
