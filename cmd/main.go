@@ -20,8 +20,8 @@ func main() {
 
 	repository := tracker.NewMemoryRepository()
 	client := ask.New()
-	tracker := tracker.New(repository, client)
-	goffeineServer := server.NewGoffeineServer(tracker)
+	t := tracker.New(repository, client)
+	goffeineServer := server.NewGoffeineServer(t)
 
 	port := os.Getenv("PORT")
 	if port == "" {
