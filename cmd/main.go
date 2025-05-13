@@ -5,13 +5,11 @@ import (
 	"github.com/MartinGallauner/goffeine/internal/ask"
 	"github.com/MartinGallauner/goffeine/internal/server"
 	"github.com/MartinGallauner/goffeine/internal/tracker"
-	"github.com/alexedwards/scs/v2"
 	"github.com/joho/godotenv"
 	"log"
 	"log/slog"
 	"net/http"
 	"os"
-	"time"
 )
 
 func main() {
@@ -22,12 +20,8 @@ func main() {
 
 	repository := tracker.NewMemoryRepository()
 	client := ask.New()
-
-	t := tracker.New(repository, client)
-
-	sessionManager := scs.New()
-	sessionManager.Lifetime = 24 * time.Hour
-	goffeineServer := server.NewGoffeineServer(t, sessionManager)
+	tracker := tracker.New(repository, client)
+	goffeineServer := server.NewGoffeineServer(tracker)
 
 	port := os.Getenv("PORT")
 	if port == "" {

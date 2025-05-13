@@ -9,10 +9,9 @@ import (
 type GoffeineServer struct {
 	Tracker Tracker
 	http.Handler
-	SessionManager SessionManager
 }
 
-func NewGoffeineServer(tracker Tracker, sessionManager SessionManager) *GoffeineServer {
+func NewGoffeineServer(tracker Tracker) *GoffeineServer {
 	s := &GoffeineServer{
 		Tracker: tracker,
 	}
@@ -23,18 +22,10 @@ func NewGoffeineServer(tracker Tracker, sessionManager SessionManager) *Goffeine
 	router.Handle("/api/status", http.HandlerFunc(handlers.Status))
 	router.Handle("/api/add", http.HandlerFunc(handlers.Intake))
 	router.Handle("/", http.HandlerFunc(handlers.Page))
-
-	routerWithMiddleware := sessionManager.LoadAndSave(router)
-
-	s.Handler = routerWithMiddleware
 	return s
 }
 
 type Tracker interface {
 	GetLevel(time time.Time) (int, error)
 	Add(userInput string) error
-}
-
-type SessionManager interface {
-	LoadAndSave(http.Handler) http.Handler
 }
