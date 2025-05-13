@@ -9,7 +9,9 @@ test:
 
 .PHONY: build
 build:
-	templ generate && go build -o bin/goffeine ./cmd
+	templ generate && npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/output.css --watch && go build -o bin/goffeine ./cmd
+
+
 
 .PHONY: run
 run: build
