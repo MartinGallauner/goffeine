@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows: [ "Integration" ]
-    types: [ completed ]
+    types: [ success ]
     branches: [ main ]
-  
+
 env:
   PROJECT_ID: 'goffeine'
   REGION: 'europe-west3'
