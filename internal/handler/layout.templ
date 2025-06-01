@@ -12,10 +12,9 @@ templ header(title string)  {
 templ Layout(contents templ.Component, title string) {
     @header(title)
     <body class="flex flex-col h-screen bg-yellow-700">
-      <main class="flex-1 container ">
-        <h1 class="text-3xl">This is the headline</h1>
-        <h1 class="text-2xl">This is the headline</h1>
-        <h1>This is the headline</h1>
+      <main class="flex-1 container mx-auto max-w-4xl">
+        <h1 class="text-3xl">Goffeine</h1>
+        <h1 class="text-2xl">Keep your level in check!</h1>
         @contents
       </main>
     </body>
