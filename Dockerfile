@@ -1,7 +1,19 @@
 FROM golang:1.24 AS builder
 WORKDIR /app
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install dependencies
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
+
 COPY . .
-RUN go install github.com/a-h/templ/cmd/templ@latest &&\
+RUN go install github.com/a-h/templ/cmd/templ@v0.3.865 &&\
     make build
 
 FROM debian:stable-slim
