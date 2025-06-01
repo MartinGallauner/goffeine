@@ -5,13 +5,13 @@ templ header(title string)  {
     <title>{ title }</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="/assets/dist/style.css" />
 </head>
 }
 
 templ Layout(contents templ.Component, title string) {
     @header(title)
-    <body class="flex flex-col h-full bg-slate-900">
+    <body class="flex flex-col h-screen bg-yellow-700">
       <main class="flex-1 container ">
         <h1 class="text-3xl">This is the headline</h1>
         <h1 class="text-2xl">This is the headline</h1>
