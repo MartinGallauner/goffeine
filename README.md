@@ -12,8 +12,16 @@ I picked because it's been the very first result of my minimal effort google sea
 
 
 
+## Development
+
+1. You can install the dependencies by running `make setup`.
+2. Rename the provided `.env.dev` to `.env`, add your own OpenAPI key.
+3. To start the project locally run `make run`. This will run the complete build and starts the server
+
+
 ## Contributing 
 
 The project is too half-baked to accept contributions.
+
 
 
