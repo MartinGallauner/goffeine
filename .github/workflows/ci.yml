@@ -78,7 +78,7 @@ jobs:
       - id: 'auth'
         uses: 'google-github-actions/auth@v2'
         with:
-          project_id: goffeine
+          project_id: goffeine-468309
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: push image
