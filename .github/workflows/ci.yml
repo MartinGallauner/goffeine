@@ -82,5 +82,5 @@ jobs:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: push image
-        run: gcloud builds submit --tag europe-west3-docker.pkg.dev/goffeine-468309/goffeine-hub:latest 
+        run: gcloud builds submit --tag europe-west3-docker.pkg.dev/goffeine-468309/goffeine-hub/goffeine:latest . 
 
