@@ -36,4 +36,4 @@ jobs:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Deploy to Cloud Run
-        run: gcloud run deploy goffeine --image europe-west3-docker.pkg.dev/goffeine-468309/goffeine-hub/goffeine:latest --region europe-west3 --allow-unauthenticated --project ${{ env.PROJECT_ID }} --max-instances=2
+        run: gcloud run deploy goffeine --image europe-west3-docker.pkg.dev/goffeine-468309/goffeine-hub/goffeine:latest --region europe-west3 --allow-unauthenticated --project ${{ env.PROJECT_ID }} --max-instances=2 --service-account=github-actions@goffeine-468309.iam.gserviceaccount.com
