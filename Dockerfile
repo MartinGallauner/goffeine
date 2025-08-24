@@ -13,7 +13,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install
 
 COPY . .
-RUN go install github.com/a-h/templ/cmd/templ@v0.3.865 &&\
+RUN go install github.com/a-h/templ/cmd/templ@v0.3.924 &&\
     make build
 
 FROM debian:stable-slim
