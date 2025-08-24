@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows: [ "Integration" ]
-    types: [ success ]
+    types: [ completed ]
     branches: [ main ]
 
 env:
